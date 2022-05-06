@@ -1,9 +1,13 @@
 import React from 'react';
+import {useAppSelector} from '../app/hooks';
 
 const Favorites = () => {
+	const {
+			  favoriteLocations
+		  } = useAppSelector(({weatherData}) => weatherData)
 	return (
 		<div>
-			Favorites works!
+			{favoriteLocations.map((location) => <div>{location.LocalizedName}, {location.Country.LocalizedName}</div>)}
 		</div>
 	);
 };

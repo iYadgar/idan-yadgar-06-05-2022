@@ -1,10 +1,10 @@
 import {Action, configureStore, ThunkAction} from '@reduxjs/toolkit';
-import homeReducer from '../reducer/homeReducer';
 import layoutReducer from '../reducer/layoutReducer';
+import weatherDataReducer from '../reducer/weatherDataReducer';
 
 export const store = configureStore({
 	reducer: {
-		home: homeReducer,
+		weatherData: weatherDataReducer,
 		layout: layoutReducer
 	},
 });

@@ -3,7 +3,7 @@ import {Alert, Autocomplete, CircularProgress, debounce, Snackbar, TextField} fr
 import {AutocompleteLocation} from '../types';
 import {getAutocompleteLocations} from '../api';
 import {useAppDispatch} from '../app/hooks';
-import {setSelectedLocation} from '../reducer/homeReducer';
+import {setSelectedLocation} from '../reducer/weatherDataReducer';
 
 
 const SearchBarAutocomplete = () => {
@@ -24,7 +24,7 @@ const SearchBarAutocomplete = () => {
 				  const getOptions = async () => {
 					  if (searchTerm && shouldRequest.current) {
 						  setIsOpen(true)
-						  const {data, error} = await getAutocompleteLocations({searchTerm, throwError: false, useMock: false})
+						  const {data, error} = await getAutocompleteLocations({searchTerm, throwError: false, useMock: true})
 						  if (error) {
 							  setOpenErrorToast(true);
 							  setIsOpen(false)

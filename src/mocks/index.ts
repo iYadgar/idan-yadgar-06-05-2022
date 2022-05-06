@@ -1,5 +1,4 @@
-import {AutocompleteLocation, CurrentWeather} from '../types';
-
+import {AutocompleteLocation, CurrentWeather, WeeklyForcast} from '../types';
 export const AUTOCOMPLETE_MOCKS: AutocompleteLocation[] = [
 	{
 		"Version": 1,
@@ -177,3 +176,179 @@ export const CURRENT_WEATHER_MOCK: CurrentWeather[] = [
 		"Link": "http://www.accuweather.com/en/ru/moscow/294021/current-weather/294021?lang=en-us"
 	}
 ]
+export const WEEKLY_FORCAST_MOCK: WeeklyForcast = {
+	"Headline": {
+		"EffectiveDate": "2022-05-08T01:00:00+03:00",
+		"EffectiveEpochDate": 1651960800,
+		"Severity": 5,
+		"Text": "Expect rainy weather late Saturday night through Sunday morning",
+		"Category": "rain",
+		"EndDate": "2022-05-08T13:00:00+03:00",
+		"EndEpochDate": 1652004000,
+		"MobileLink": "http://www.accuweather.com/en/ru/moscow/294021/daily-weather-forecast/294021?unit=c&lang=en-us",
+		"Link": "http://www.accuweather.com/en/ru/moscow/294021/daily-weather-forecast/294021?unit=c&lang=en-us"
+	},
+	"DailyForecasts": [
+		{
+			"Date": "2022-05-06T07:00:00+03:00",
+			"EpochDate": 1651809600,
+			"Temperature": {
+				"Minimum": {
+					"Value": 8,
+					"Unit": "C",
+					"UnitType": 17
+				},
+				"Maximum": {
+					"Value": 15.3,
+					"Unit": "C",
+					"UnitType": 17
+				}
+			},
+			"Day": {
+				"Icon": 7,
+				"IconPhrase": "Cloudy",
+				"HasPrecipitation": false
+			},
+			"Night": {
+				"Icon": 38,
+				"IconPhrase": "Mostly cloudy",
+				"HasPrecipitation": false
+			},
+			"Sources": [
+				"AccuWeather"
+			],
+			"MobileLink": "http://www.accuweather.com/en/ru/moscow/294021/daily-weather-forecast/294021?day=1&unit=c&lang=en-us",
+			"Link": "http://www.accuweather.com/en/ru/moscow/294021/daily-weather-forecast/294021?day=1&unit=c&lang=en-us"
+		},
+		{
+			"Date": "2022-05-07T07:00:00+03:00",
+			"EpochDate": 1651896000,
+			"Temperature": {
+				"Minimum": {
+					"Value": 10.2,
+					"Unit": "C",
+					"UnitType": 17
+				},
+				"Maximum": {
+					"Value": 15.5,
+					"Unit": "C",
+					"UnitType": 17
+				}
+			},
+			"Day": {
+				"Icon": 7,
+				"IconPhrase": "Cloudy",
+				"HasPrecipitation": false
+			},
+			"Night": {
+				"Icon": 18,
+				"IconPhrase": "Rain",
+				"HasPrecipitation": true,
+				"PrecipitationType": "Rain",
+				"PrecipitationIntensity": "Light"
+			},
+			"Sources": [
+				"AccuWeather"
+			],
+			"MobileLink": "http://www.accuweather.com/en/ru/moscow/294021/daily-weather-forecast/294021?day=2&unit=c&lang=en-us",
+			"Link": "http://www.accuweather.com/en/ru/moscow/294021/daily-weather-forecast/294021?day=2&unit=c&lang=en-us"
+		},
+		{
+			"Date": "2022-05-08T07:00:00+03:00",
+			"EpochDate": 1651982400,
+			"Temperature": {
+				"Minimum": {
+					"Value": 6.1,
+					"Unit": "C",
+					"UnitType": 17
+				},
+				"Maximum": {
+					"Value": 17.6,
+					"Unit": "C",
+					"UnitType": 17
+				}
+			},
+			"Day": {
+				"Icon": 12,
+				"IconPhrase": "Showers",
+				"HasPrecipitation": true,
+				"PrecipitationType": "Rain",
+				"PrecipitationIntensity": "Light"
+			},
+			"Night": {
+				"Icon": 36,
+				"IconPhrase": "Intermittent clouds",
+				"HasPrecipitation": false
+			},
+			"Sources": [
+				"AccuWeather"
+			],
+			"MobileLink": "http://www.accuweather.com/en/ru/moscow/294021/daily-weather-forecast/294021?day=3&unit=c&lang=en-us",
+			"Link": "http://www.accuweather.com/en/ru/moscow/294021/daily-weather-forecast/294021?day=3&unit=c&lang=en-us"
+		},
+		{
+			"Date": "2022-05-09T07:00:00+03:00",
+			"EpochDate": 1652068800,
+			"Temperature": {
+				"Minimum": {
+					"Value": 5.7,
+					"Unit": "C",
+					"UnitType": 17
+				},
+				"Maximum": {
+					"Value": 11.4,
+					"Unit": "C",
+					"UnitType": 17
+				}
+			},
+			"Day": {
+				"Icon": 6,
+				"IconPhrase": "Mostly cloudy",
+				"HasPrecipitation": false
+			},
+			"Night": {
+				"Icon": 7,
+				"IconPhrase": "Cloudy",
+				"HasPrecipitation": false
+			},
+			"Sources": [
+				"AccuWeather"
+			],
+			"MobileLink": "http://www.accuweather.com/en/ru/moscow/294021/daily-weather-forecast/294021?day=4&unit=c&lang=en-us",
+			"Link": "http://www.accuweather.com/en/ru/moscow/294021/daily-weather-forecast/294021?day=4&unit=c&lang=en-us"
+		},
+		{
+			"Date": "2022-05-10T07:00:00+03:00",
+			"EpochDate": 1652155200,
+			"Temperature": {
+				"Minimum": {
+					"Value": 3.2,
+					"Unit": "C",
+					"UnitType": 17
+				},
+				"Maximum": {
+					"Value": 11.7,
+					"Unit": "C",
+					"UnitType": 17
+				}
+			},
+			"Day": {
+				"Icon": 12,
+				"IconPhrase": "Showers",
+				"HasPrecipitation": true,
+				"PrecipitationType": "Rain",
+				"PrecipitationIntensity": "Light"
+			},
+			"Night": {
+				"Icon": 34,
+				"IconPhrase": "Mostly clear",
+				"HasPrecipitation": false
+			},
+			"Sources": [
+				"AccuWeather"
+			],
+			"MobileLink": "http://www.accuweather.com/en/ru/moscow/294021/daily-weather-forecast/294021?day=5&unit=c&lang=en-us",
+			"Link": "http://www.accuweather.com/en/ru/moscow/294021/daily-weather-forecast/294021?day=5&unit=c&lang=en-us"
+		}
+	]
+}
