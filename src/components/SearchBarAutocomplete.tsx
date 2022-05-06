@@ -2,6 +2,8 @@ import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {Alert, Autocomplete, CircularProgress, debounce, Snackbar, TextField} from '@mui/material';
 import {AutocompleteLocation} from '../types';
 import {getAutocompleteLocations} from '../api';
+import {useAppDispatch} from '../app/hooks';
+import {setSelectedLocation} from '../reducer/homeReducer';
 
 
 const SearchBarAutocomplete = () => {
@@ -9,6 +11,7 @@ const SearchBarAutocomplete = () => {
 		  const [options, setOptions] = React.useState<AutocompleteLocation[]>([]);
 		  const [searchTerm, setSearchTerm] = useState('');
 		  const [openErrorToast, setOpenErrorToast] = useState(false);
+		  const dispatch = useAppDispatch();
 		  const shouldRequest = useRef(true);
 		  const loading = useMemo(() => isOpen && options.length === 0, [isOpen, options.length]);
 		  const searchDelayed = useMemo(
@@ -21,7 +24,7 @@ const SearchBarAutocomplete = () => {
 				  const getOptions = async () => {
 					  if (searchTerm && shouldRequest.current) {
 						  setIsOpen(true)
-						  const {data, error} = await getAutocompleteLocations({searchTerm, throwError: false, useMock: true})
+						  const {data, error} = await getAutocompleteLocations({searchTerm, throwError: false, useMock: false})
 						  if (error) {
 							  setOpenErrorToast(true);
 							  setIsOpen(false)
@@ -34,6 +37,10 @@ const SearchBarAutocomplete = () => {
 				  getOptions()
 			  }, [searchTerm]
 		  )
+		  const onLocationSelect = (value: any) => {
+			  shouldRequest.current = false
+			  dispatch(setSelectedLocation(value))
+		  }
 
 
 		  return (
@@ -49,7 +56,7 @@ const SearchBarAutocomplete = () => {
 				  options={options}
 				  loading={loading}
 				  onInputChange={(e, value) => searchDelayed(value)}
-				  onChange={(event) => shouldRequest.current = false}
+				  onChange={(event, location) => location && onLocationSelect({location})}
 				  renderInput={(params) => (
 					  <TextField
 						  {...params}

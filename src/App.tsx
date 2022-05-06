@@ -1,48 +1,51 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {
 	AppBar,
 	createTheme,
-	IconButton,
+	IconButton, styled,
 	ThemeProvider,
 	ToggleButton,
 	ToggleButtonGroup,
 	Toolbar,
 	Typography
 } from '@mui/material';
-import styled from 'styled-components';
-import {DarkMode, Favorite, LightMode, Home as HomeIcon} from '@mui/icons-material';
+import {DarkMode, Favorite, Home as HomeIcon, LightMode} from '@mui/icons-material';
 import {Route, Routes, useNavigate} from "react-router-dom";
 import Favorites from './views/Favorites';
 import Home from './views/Home';
 import {LOCAL_STORAGE_KEYS, ROUTES} from './constants';
+import {ThemeMode} from './types';
+import {useAppDispatch, useAppSelector} from './app/hooks';
+import {setThemeMode} from './reducer/layoutReducer';
 
 
-const AppContainer = styled.div<{ isDarkMode: boolean }>`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  background: ${({isDarkMode}) => isDarkMode ? '#121212' : 'white'};
-`
+const AppContainer = styled('div')(({theme}) => ({
+	display: 'flex',
+	flex: 1,
+	flexDirection: 'column',
+	backgroundColor: theme.palette.background.default
+}))
+
 const StyledToolbar = styled(Toolbar)`
   display: flex;
   justify-content: space-between;
   align-items: center;
 `
-const ToolbarButtonsContainer = styled.div`
+const ToolbarButtonsContainer = styled('div')`
   display: flex;
   align-items: center;
   min-width: 15%;
   justify-content: space-between;
 `
-const NavButtonsContainer = styled.div`
+const NavButtonsContainer = styled('div')`
   display: flex;
   justify-content: space-between;`
 
-type ThemeOptions = 'dark' | 'light';
 
 function App() {
 	const navigate = useNavigate()
-	const [themeMode, setThemeMode] = useState<ThemeOptions>('dark');
+	const {themeMode} = useAppSelector(({layout}) => layout)
+	const dispatch = useAppDispatch();
 	const theme = createTheme({
 		palette: {
 			mode: themeMode,
@@ -51,17 +54,22 @@ function App() {
 	useEffect(() => {
 		const themeMode: string | null = localStorage.getItem(LOCAL_STORAGE_KEYS.THEME)
 		if (themeMode) {
-			setThemeMode(themeMode as ThemeOptions)
+			updateTheme(themeMode as ThemeMode)
 		}
 	}, []);
-
-	const handleThemeToggle = (themeMode: ThemeOptions) => {
-		setThemeMode(themeMode)
-		localStorage.setItem(LOCAL_STORAGE_KEYS.THEME, themeMode)
+	const updateTheme = (themeMode: ThemeMode) => {
+		dispatch(setThemeMode({themeMode}))
 	}
+	const handleThemeToggle = (themeMode: ThemeMode) => {
+		if (themeMode) {
+			updateTheme(themeMode)
+			localStorage.setItem(LOCAL_STORAGE_KEYS.THEME, themeMode)
+		}
+	}
+
 	return (
 		<ThemeProvider theme={theme}>
-			<AppContainer isDarkMode={themeMode === 'dark'}>
+			<AppContainer>
 				<AppBar position="static">
 					<StyledToolbar>
 						<Typography

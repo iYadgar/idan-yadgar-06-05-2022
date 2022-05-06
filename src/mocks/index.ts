@@ -1,4 +1,4 @@
-import {AutocompleteLocation} from '../types';
+import {AutocompleteLocation, CurrentWeather} from '../types';
 
 export const AUTOCOMPLETE_MOCKS: AutocompleteLocation[] = [
 	{
@@ -150,5 +150,30 @@ export const AUTOCOMPLETE_MOCKS: AutocompleteLocation[] = [
 			"ID": "28",
 			"LocalizedName": "Mombasa"
 		}
+	}
+]
+export const CURRENT_WEATHER_MOCK: CurrentWeather[] = [
+	{
+		"LocalObservationDateTime": "2022-05-06T14:48:00+03:00",
+		"EpochTime": 1651837680,
+		"WeatherText": "Cloudy",
+		"WeatherIcon": 7,
+		"HasPrecipitation": false,
+		"PrecipitationType": null,
+		"IsDayTime": true,
+		"Temperature": {
+			"Metric": {
+				"Value": 14.8,
+				"Unit": "C",
+				"UnitType": 17
+			},
+			"Imperial": {
+				"Value": 59,
+				"Unit": "F",
+				"UnitType": 18
+			}
+		},
+		"MobileLink": "http://www.accuweather.com/en/ru/moscow/294021/current-weather/294021?lang=en-us",
+		"Link": "http://www.accuweather.com/en/ru/moscow/294021/current-weather/294021?lang=en-us"
 	}
 ]
