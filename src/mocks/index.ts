@@ -1,4 +1,5 @@
 import {AccuweatherLocation, CurrentWeather, WeeklyForcast} from '../types';
+
 export const AUTOCOMPLETE_MOCKS: AccuweatherLocation[] = [
 	{
 		"Version": 1,
@@ -351,4 +352,20 @@ export const WEEKLY_FORCAST_MOCK: WeeklyForcast = {
 			"Link": "http://www.accuweather.com/en/ru/moscow/294021/daily-weather-forecast/294021?day=5&unit=c&lang=en-us"
 		}
 	]
+}
+export const GEO_LOCATION_RES_MOCK: AccuweatherLocation = {
+	"Version": 1,
+	"Key": "1278920",
+	"Type": "City",
+	"Rank": 55,
+	"LocalizedName": "Ma`ale Adummim",
+	"Country": {
+		"ID": "PS",
+		"LocalizedName": "Palestine",
+	},
+	"AdministrativeArea": {
+		"ID": "WE",
+		"LocalizedName": "West Bank",
+	},
+
 }

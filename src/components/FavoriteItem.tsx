@@ -8,6 +8,7 @@ import {useFavoritesIndicator} from '../app/hooks';
 
 interface Props {
 	location: AccuweatherLocation
+	onFetchError: (e: any) => any
 }
 
 const StyledCard = styled(Card)`
@@ -28,7 +29,7 @@ const ItemImage = styled('div')`
   align-items: center;`
 const StyledCardActions = styled(CardActions)`flex: 1`
 
-const FavoriteItem: React.FC<Props> = ({location}) => {
+const FavoriteItem: React.FC<Props> = ({location, onFetchError}) => {
 	const [currentWeather, setCurrentWeather] = useState<CurrentWeather | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const getFavoriteIndicator = useFavoritesIndicator({location})
@@ -41,7 +42,7 @@ const FavoriteItem: React.FC<Props> = ({location}) => {
 				throwError: false
 			})
 			if (error) {
-				console.error(error)
+				onFetchError(error)
 			}
 			if (data && !error) {
 				setCurrentWeather(data[0])

@@ -1,5 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {ThemeMode} from '../types';
+import {LOCAL_STORAGE_KEYS} from '../constants';
 
 interface LayoutState {
 	themeMode: ThemeMode
@@ -16,6 +17,7 @@ export const layoutSlice = createSlice({
 		setThemeMode(state, action: { payload: { themeMode: ThemeMode } }) {
 			const {themeMode} = action.payload;
 			state.themeMode = themeMode;
+			localStorage.setItem(LOCAL_STORAGE_KEYS.THEME, themeMode)
 		}
 	}
 })

@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import SearchBarAutocomplete from '../components/SearchBarAutocomplete';
-import {Box, CircularProgress, Container, styled, Toolbar, Typography} from '@mui/material';
+import {Alert, Box, CircularProgress, Container, Snackbar, styled, Toolbar, Typography} from '@mui/material';
 import {useAppDispatch, useAppSelector, useFavoritesIndicator} from '../app/hooks';
 import {getLocationWeatherDetails} from '../reducer/weatherDataReducer';
 import ForecastItem from '../components/ForecastItem';
@@ -26,11 +26,11 @@ const StyledContainer = styled(Container)(({theme}) => ({
 	color: theme.palette.text.primary,
 	borderRadius: '10px',
 	justifyContent: 'space-between',
-	overflowY: 'auto',
 	[theme.breakpoints.down("md")]: {
 		flex: 1,
 		height: '100%',
 		backgroundColor: theme.palette.background.default,
+		overflowY: 'auto',
 	}
 }))
 const ForecastContainer = styled(Container)(({theme}) => ({
@@ -49,14 +49,20 @@ const StyledSpinner = styled(CircularProgress)`
   top: 50%;
   right: 50%;
 `
-const StyledToolbar = styled(Toolbar)`
+const Header = styled('div')`
+  display: flex;
   justify-content: space-between;
 `
 const StyledBox = styled(Box)`
+  flex: 1;
   height: 100%;
+
+  .favorite-start {
+    justify-content: flex-end;
+  }
 `
 const ForecastItemWrapper = styled('div')`
-  flex: 0.9;
+  flex: 1;
   height: 250px;
   padding: 10px;
 `
@@ -69,18 +75,26 @@ const Home = () => {
 			  error,
 			  currentWeather,
 			  forecastDetails,
+			  unitSystem
 		  } = useAppSelector(({weatherData}) => weatherData)
+	const [openErrorToast, setOpenErrorToast] = useState(false);
 	const dispatch = useAppDispatch();
 	const getFavoriteIndicator = useFavoritesIndicator({location: selectedLocation})
 	useEffect(() => {
 		if (selectedLocation) {
-			dispatch(getLocationWeatherDetails(selectedLocation.Key))
+			dispatch(getLocationWeatherDetails({locationKey: selectedLocation.Key, unitSystem}))
 		}
-	}, [dispatch, selectedLocation]);
+	}, [dispatch, selectedLocation, unitSystem]);
+	useEffect(() => {
+		if (error) {
+			setOpenErrorToast(true)
+			console.error(error)
+		}
+	}, [error]);
 
 
 	const renderWeatherContent = () => forecastDetails && selectedLocation && currentWeather && <>
-		<StyledToolbar>
+		<Header>
 			<StyledBox>
 				<Typography variant='h4'>
 					{selectedLocation.LocalizedName}, {selectedLocation.Country.LocalizedName}
@@ -90,10 +104,10 @@ const Home = () => {
 					{forecastDetails.Headline.Text}
 				</Typography>
 			</StyledBox>
-			<StyledBox>
+			<StyledBox className='favorite-start'>
 				{getFavoriteIndicator()}
 			</StyledBox>
-		</StyledToolbar>
+		</Header>
 		<ForecastContainer>
 			{forecastDetails.DailyForecasts.map((forecast) => <ForecastItemWrapper key={forecast.Date}>
 					<ForecastItem
@@ -107,6 +121,13 @@ const Home = () => {
 			<StyledContainer>
 				{isLoading ? <StyledSpinner/> : renderWeatherContent()}
 			</StyledContainer>
+			<Snackbar open={openErrorToast} autoHideDuration={3000}
+					  anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
+					  onClick={() => setOpenErrorToast(false)}>
+				<Alert severity="error">
+					There was a problem fetching weather data
+				</Alert>
+			</Snackbar>
 		</HomeContainer>
 	);
 }

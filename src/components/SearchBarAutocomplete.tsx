@@ -1,18 +1,18 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {Alert, Autocomplete, CircularProgress, debounce, Snackbar, TextField} from '@mui/material';
 import {AccuweatherLocation} from '../types';
 import {getAutocompleteLocations} from '../api';
-import {useAppDispatch} from '../app/hooks';
+import {useAppDispatch, useAppSelector} from '../app/hooks';
 import {setSelectedLocation} from '../reducer/weatherDataReducer';
 
 
 const SearchBarAutocomplete = () => {
+		  const {selectedLocation} = useAppSelector(({weatherData}) => weatherData)
 		  const [isOpen, setIsOpen] = useState(false);
 		  const [options, setOptions] = React.useState<AccuweatherLocation[]>([]);
 		  const [searchTerm, setSearchTerm] = useState('');
 		  const [openErrorToast, setOpenErrorToast] = useState(false);
 		  const dispatch = useAppDispatch();
-		  const shouldRequest = useRef(true);
 		  const loading = useMemo(() => isOpen && options.length === 0, [isOpen, options.length]);
 		  const searchDelayed = useMemo(
 			  () => debounce((value) => {
@@ -22,15 +22,21 @@ const SearchBarAutocomplete = () => {
 		  );
 		  useEffect(() => {
 				  const getOptions = async () => {
-					  if (searchTerm && shouldRequest.current) {
-						  setIsOpen(true)
-						  const {data, error} = await getAutocompleteLocations({searchTerm, throwError: false, useMock: true})
-						  if (error) {
-							  setOpenErrorToast(true);
-							  setIsOpen(false)
+					  if (searchTerm) {
+						  let shouldRequest;
+						  if (selectedLocation) {
+							  shouldRequest = !(selectedLocation.LocalizedName === searchTerm.slice(0, searchTerm.indexOf(',')))
 						  }
-						  if (data) {
-							  setOptions(data)
+						  if (shouldRequest) {
+							  setIsOpen(true)
+							  const {data, error} = await getAutocompleteLocations({searchTerm, throwError: false, useMock: true})
+							  if (error) {
+								  setOpenErrorToast(true);
+								  setIsOpen(false)
+							  }
+							  if (data) {
+								  setOptions(data)
+							  }
 						  }
 					  }
 				  }
@@ -38,7 +44,6 @@ const SearchBarAutocomplete = () => {
 			  }, [searchTerm]
 		  )
 		  const onLocationSelect = (value: any) => {
-			  shouldRequest.current = false
 			  dispatch(setSelectedLocation(value))
 		  }
 
@@ -50,7 +55,6 @@ const SearchBarAutocomplete = () => {
 				  onClose={() => {
 					  setIsOpen(false);
 				  }}
-				  filterOptions={(x) => x}
 				  isOptionEqualToValue={(option, value) => option.Key === value.Key}
 				  getOptionLabel={(option) => `${option.LocalizedName}, ${option.Country.LocalizedName}`}
 				  options={options}

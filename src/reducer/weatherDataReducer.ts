@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {AccuweatherLocation, CurrentWeather, WeeklyForcast} from '../types';
+import {AccuweatherLocation, CurrentWeather, UnitOptions, WeeklyForcast} from '../types';
 import * as api from '../api'
 import {LOCAL_STORAGE_KEYS} from '../constants';
 
@@ -10,6 +10,7 @@ interface HomeState {
 	error: any
 	isLoading: boolean
 	favoriteLocations: AccuweatherLocation[];
+	unitSystem: UnitOptions
 
 }
 
@@ -19,15 +20,20 @@ const initialState: HomeState = {
 	forecastDetails: null,
 	error: null,
 	isLoading: false,
-	favoriteLocations: []
+	favoriteLocations: [],
+	unitSystem: 'metric'
 
 }
-export const getLocationWeatherDetails = createAsyncThunk('home/getCurrentWeather', async (locationKey: string) => {
-	const [currentWeatherDetails, forecastDetails] = await Promise.all([api.getCurrentWeather({
-		locationKey,
-		throwError: false,
-		useMock: true
-	}), api.get5DaysForecast({locationKey, metric: true, throwError: false, useMock: true})])
+export const getLocationWeatherDetails = createAsyncThunk('home/getCurrentWeather', async ({
+	locationKey,
+	unitSystem
+}: { locationKey: string, unitSystem: UnitOptions }) => {
+	const [currentWeatherDetails, forecastDetails] = await Promise.all([
+		api.getCurrentWeather({
+			locationKey,
+			throwError: false,
+			useMock: false
+		}), api.get5DaysForecast({locationKey, metric: unitSystem === 'metric', throwError: false, useMock: false})])
 	return {
 		data: {currentWeather: currentWeatherDetails.data, forecastDetails: forecastDetails.data},
 		error: currentWeatherDetails.error || forecastDetails.error
@@ -56,6 +62,11 @@ export const weatherDataSlice = createSlice({
 			const {locations} = action.payload;
 			state.favoriteLocations = locations
 			localStorage.setItem(LOCAL_STORAGE_KEYS.FAVORITES, JSON.stringify(state.favoriteLocations))
+		},
+		setUnitSystem(state, action: { payload: { unit: UnitOptions } }) {
+			const {unit} = action.payload;
+			state.unitSystem = unit
+			localStorage.setItem(LOCAL_STORAGE_KEYS.WEATHER_UNIT, unit)
 		}
 
 
@@ -75,7 +86,12 @@ export const weatherDataSlice = createSlice({
 	}
 })
 
-export const {setSelectedLocation, toggleFavoriteLocation, setFavoriteLocations} = weatherDataSlice.actions
+export const {
+				 setUnitSystem,
+				 setSelectedLocation,
+				 toggleFavoriteLocation,
+				 setFavoriteLocations
+			 } = weatherDataSlice.actions
 
 
 export default weatherDataSlice.reducer
