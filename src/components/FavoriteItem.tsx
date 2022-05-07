@@ -38,7 +38,6 @@ const FavoriteItem: React.FC<Props> = ({location, onFetchError}) => {
 			setIsLoading(true)
 			const {data, error} = await getCurrentWeather({
 				locationKey: location.Key,
-				useMock: true,
 				throwError: false
 			})
 			if (error) {

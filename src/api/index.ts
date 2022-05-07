@@ -3,6 +3,7 @@ import {AUTOCOMPLETE_MOCKS, CURRENT_WEATHER_MOCK, GEO_LOCATION_RES_MOCK, WEEKLY_
 import axios, {AxiosRequestConfig} from 'axios';
 import {API_ENDPOINTS, API_KEY, BASE_API_URL} from '../constants';
 import {AccuweatherLocation, CurrentWeather, WeeklyForcast} from '../types';
+import {USE_MOCK} from '../config';
 
 interface BaseApiResponse<T> {
 	data: T | null;
@@ -12,15 +13,14 @@ interface BaseApiResponse<T> {
 export const baseRequest = async <T>({
 	url,
 	mockData,
-	useMock = false,
 	options = {},
 	throwError = false
-}: { url: string, mockData?: T, useMock?: boolean, options?: AxiosRequestConfig, throwError?: boolean }): Promise<BaseApiResponse<T>> => {
+}: { url: string, mockData?: T, options?: AxiosRequestConfig, throwError?: boolean }): Promise<BaseApiResponse<T>> => {
 	try {
 		if (throwError) {
 			throw new Error('Failed')
 		}
-		if (useMock && mockData) {
+		if (USE_MOCK && mockData) {
 			await sleep(1e3)
 			return {
 				data: mockData,
@@ -42,7 +42,6 @@ export const getAutocompleteLocations = async ({
 }: { searchTerm: string, useMock?: boolean, throwError?: boolean }): Promise<BaseApiResponse<AccuweatherLocation[]>> => {
 	return baseRequest<AccuweatherLocation[]>({
 		throwError,
-		useMock,
 		mockData: AUTOCOMPLETE_MOCKS,
 		url: `${BASE_API_URL}/${API_ENDPOINTS.autocomplete}`, options: {
 			params: {
@@ -55,12 +54,10 @@ export const getAutocompleteLocations = async ({
 }
 export const getLocationFromCoordinates = async ({
 	coordinates,
-	useMock = true,
 	throwError = false,
-}: { coordinates: string, useMock?: boolean, throwError?: boolean }): Promise<BaseApiResponse<AccuweatherLocation>> => {
+}: { coordinates: string, throwError?: boolean }): Promise<BaseApiResponse<AccuweatherLocation>> => {
 	return baseRequest<AccuweatherLocation>({
 		throwError,
-		useMock,
 		mockData: GEO_LOCATION_RES_MOCK,
 		url: `${BASE_API_URL}/${API_ENDPOINTS.locationFromCoordinates}`, options: {
 			params: {
@@ -74,12 +71,11 @@ export const getLocationFromCoordinates = async ({
 
 export const getCurrentWeather = async ({
 	locationKey,
-	useMock = true,
 	throwError = false,
-}: { locationKey: string, useMock?: boolean, throwError?: boolean }): Promise<BaseApiResponse<CurrentWeather[]>> => {
+}: { locationKey: string, throwError?: boolean }): Promise<BaseApiResponse<CurrentWeather[]>> => {
 	const url = `${BASE_API_URL}/${API_ENDPOINTS.currentWeather(locationKey)}`
 	return baseRequest<CurrentWeather[]>({
-		url, throwError, useMock,
+		url, throwError,
 		mockData: CURRENT_WEATHER_MOCK, options: {params: {apikey: API_KEY}}
 	})
 
@@ -88,12 +84,11 @@ export const getCurrentWeather = async ({
 export const get5DaysForecast = async ({
 	locationKey,
 	metric,
-	useMock = true,
 	throwError = false,
-}: { metric: boolean, locationKey: string, useMock?: boolean, throwError?: boolean }): Promise<BaseApiResponse<WeeklyForcast>> => {
+}: { metric: boolean, locationKey: string, throwError?: boolean }): Promise<BaseApiResponse<WeeklyForcast>> => {
 	const url = `${BASE_API_URL}/${API_ENDPOINTS.weeklyForecast(locationKey)}`
 	return baseRequest<WeeklyForcast>({
-		url, useMock,
+		url,
 		mockData: WEEKLY_FORCAST_MOCK, throwError, options: {params: {apikey: API_KEY, metric}}
 	})
 

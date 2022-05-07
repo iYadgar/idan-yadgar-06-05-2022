@@ -52,15 +52,12 @@ const StyledSpinner = styled(CircularProgress)`
 const Header = styled('div')`
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
 `
 const StyledBox = styled(Box)`
   flex: 1;
   height: 100%;
-
-  .favorite-button {
-    width: 100%;
-	justify-content: flex-end;
-  }
+  justify-content: space-between;
 `
 const ForecastItemWrapper = styled('div')`
   flex: 1;
@@ -97,17 +94,16 @@ const Home = () => {
 	const renderWeatherContent = () => forecastDetails && selectedLocation && currentWeather && <>
 		<Header>
 			<StyledBox>
-				<Typography variant='h4'>
+				<Box><Typography variant='h4'>
 					{selectedLocation.LocalizedName}, {selectedLocation.Country.LocalizedName}
 				</Typography>
-				<CurrentWeatherDisplay currentWeather={currentWeather}/>
-				<Typography variant='body1'>
-					{forecastDetails.Headline.Text}
-				</Typography>
+					<CurrentWeatherDisplay currentWeather={currentWeather}/>
+					<Typography variant='body1'>
+						{forecastDetails.Headline.Text}
+					</Typography></Box>
 			</StyledBox>
-			<StyledBox >
-				{getFavoriteIndicator('favorite-button')}
-			</StyledBox>
+			{getFavoriteIndicator()}
+
 		</Header>
 		<ForecastContainer>
 			{forecastDetails.DailyForecasts.map((forecast) => <ForecastItemWrapper key={forecast.Date}>

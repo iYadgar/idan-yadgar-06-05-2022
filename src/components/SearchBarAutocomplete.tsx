@@ -4,6 +4,7 @@ import {AccuweatherLocation} from '../types';
 import {getAutocompleteLocations} from '../api';
 import {useAppDispatch, useAppSelector} from '../app/hooks';
 import {setSelectedLocation} from '../reducer/weatherDataReducer';
+import {USE_MOCK} from '../config';
 
 
 const SearchBarAutocomplete = () => {
@@ -29,7 +30,10 @@ const SearchBarAutocomplete = () => {
 						  }
 						  if (shouldRequest) {
 							  setIsOpen(true)
-							  const {data, error} = await getAutocompleteLocations({searchTerm, throwError: false, useMock: false})
+							  const {data, error} = await getAutocompleteLocations({
+								  searchTerm,
+								  throwError: false,
+							  })
 							  if (error) {
 								  setOpenErrorToast(true);
 								  setIsOpen(false)

@@ -2,6 +2,7 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {AccuweatherLocation, CurrentWeather, UnitOptions, WeeklyForcast} from '../types';
 import * as api from '../api'
 import {LOCAL_STORAGE_KEYS} from '../constants';
+import {USE_MOCK} from '../config';
 
 interface HomeState {
 	selectedLocation: AccuweatherLocation | null
@@ -32,8 +33,7 @@ export const getLocationWeatherDetails = createAsyncThunk('home/getCurrentWeathe
 		api.getCurrentWeather({
 			locationKey,
 			throwError: false,
-			useMock: false
-		}), api.get5DaysForecast({locationKey, metric: unitSystem === 'metric', throwError: false, useMock: false})])
+		}), api.get5DaysForecast({locationKey, metric: unitSystem === 'metric', throwError: false})])
 	return {
 		data: {currentWeather: currentWeatherDetails.data, forecastDetails: forecastDetails.data},
 		error: currentWeatherDetails.error || forecastDetails.error

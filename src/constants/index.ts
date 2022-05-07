@@ -10,7 +10,7 @@ export const LOCAL_STORAGE_KEYS = {
 	FAVORITES: 'favorites',
 	WEATHER_UNIT: 'weatherUnit'
 }
-export const BASE_API_URL = 'http://dataservice.accuweather.com'
+export const BASE_API_URL = 'https://dataservice.accuweather.com'
 export const API_ENDPOINTS = {
 	autocomplete: 'locations/v1/cities/autocomplete',
 	locationFromCoordinates: 'locations/v1/cities/geoposition/search',
