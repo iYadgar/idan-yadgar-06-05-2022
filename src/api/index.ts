@@ -12,7 +12,7 @@ interface BaseApiResponse<T> {
 export const baseRequest = async <T>({
 	url,
 	mockData,
-	useMock = true,
+	useMock = false,
 	options = {},
 	throwError = false
 }: { url: string, mockData?: T, useMock?: boolean, options?: AxiosRequestConfig, throwError?: boolean }): Promise<BaseApiResponse<T>> => {

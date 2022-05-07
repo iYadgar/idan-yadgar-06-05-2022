@@ -29,7 +29,7 @@ const SearchBarAutocomplete = () => {
 						  }
 						  if (shouldRequest) {
 							  setIsOpen(true)
-							  const {data, error} = await getAutocompleteLocations({searchTerm, throwError: false, useMock: true})
+							  const {data, error} = await getAutocompleteLocations({searchTerm, throwError: false, useMock: false})
 							  if (error) {
 								  setOpenErrorToast(true);
 								  setIsOpen(false)

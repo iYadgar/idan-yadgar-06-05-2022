@@ -57,8 +57,9 @@ const StyledBox = styled(Box)`
   flex: 1;
   height: 100%;
 
-  .favorite-start {
-    justify-content: flex-end;
+  .favorite-button {
+    width: 100%;
+	justify-content: flex-end;
   }
 `
 const ForecastItemWrapper = styled('div')`
@@ -104,8 +105,8 @@ const Home = () => {
 					{forecastDetails.Headline.Text}
 				</Typography>
 			</StyledBox>
-			<StyledBox className='favorite-start'>
-				{getFavoriteIndicator()}
+			<StyledBox >
+				{getFavoriteIndicator('favorite-button')}
 			</StyledBox>
 		</Header>
 		<ForecastContainer>

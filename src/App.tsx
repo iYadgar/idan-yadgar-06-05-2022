@@ -40,7 +40,7 @@ function App() {
 					  error
 				  } = await getLocationFromCoordinates({
 				coordinates: `${coords.latitude},${coords.longitude}`,
-				useMock: true,
+				useMock: false,
 				throwError: false
 			})
 			if (error) {

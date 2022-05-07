@@ -24,7 +24,8 @@ export const useFavoritesIndicator = ({location}: { location: AccuweatherLocatio
 		[dispatch, location],
 	);
 
-	return () => <IconButton
+	return (className?: string) => <IconButton
+		className={className || ''}
 		onClick={toggleLocationToFavorites}
 		size="large"
 		aria-label="show 4 new mails" color="inherit">
