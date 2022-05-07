@@ -1,4 +1,4 @@
-export interface AutocompleteLocation {
+export interface AccuweatherLocation {
 	Version: number,
 	Key: string,
 	Type: string,

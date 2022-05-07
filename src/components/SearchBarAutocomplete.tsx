@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {Alert, Autocomplete, CircularProgress, debounce, Snackbar, TextField} from '@mui/material';
-import {AutocompleteLocation} from '../types';
+import {AccuweatherLocation} from '../types';
 import {getAutocompleteLocations} from '../api';
 import {useAppDispatch} from '../app/hooks';
 import {setSelectedLocation} from '../reducer/weatherDataReducer';
@@ -8,7 +8,7 @@ import {setSelectedLocation} from '../reducer/weatherDataReducer';
 
 const SearchBarAutocomplete = () => {
 		  const [isOpen, setIsOpen] = useState(false);
-		  const [options, setOptions] = React.useState<AutocompleteLocation[]>([]);
+		  const [options, setOptions] = React.useState<AccuweatherLocation[]>([]);
 		  const [searchTerm, setSearchTerm] = useState('');
 		  const [openErrorToast, setOpenErrorToast] = useState(false);
 		  const dispatch = useAppDispatch();

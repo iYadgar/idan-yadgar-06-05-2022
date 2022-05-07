@@ -1,14 +1,15 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {AutocompleteLocation, CurrentWeather, WeeklyForcast} from '../types';
+import {AccuweatherLocation, CurrentWeather, WeeklyForcast} from '../types';
 import * as api from '../api'
+import {LOCAL_STORAGE_KEYS} from '../constants';
 
 interface HomeState {
-	selectedLocation: AutocompleteLocation | null
+	selectedLocation: AccuweatherLocation | null
 	currentWeather: CurrentWeather | null
 	forecastDetails: WeeklyForcast | null
 	error: any
 	isLoading: boolean
-	favoriteLocations: AutocompleteLocation[];
+	favoriteLocations: AccuweatherLocation[];
 
 }
 
@@ -38,11 +39,11 @@ export const weatherDataSlice = createSlice({
 	name: 'weatherData',
 	initialState,
 	reducers: {
-		setSelectedLocation(state, action: { payload: { location: AutocompleteLocation } }) {
+		setSelectedLocation(state, action: { payload: { location: AccuweatherLocation } }) {
 			const {location} = action.payload;
 			state.selectedLocation = location;
 		},
-		toggleFavoriteLocation(state, action: { payload: { location: AutocompleteLocation } }) {
+		toggleFavoriteLocation(state, action: { payload: { location: AccuweatherLocation } }) {
 			const {location} = action.payload;
 			const isLocationExists = state.favoriteLocations.some((loc) => location.Key === loc.Key)
 			if (isLocationExists) {
@@ -50,7 +51,13 @@ export const weatherDataSlice = createSlice({
 			} else {
 				state.favoriteLocations.push(location)
 			}
+			localStorage.setItem(LOCAL_STORAGE_KEYS.FAVORITES, JSON.stringify(state.favoriteLocations))
+		}, setFavoriteLocations(state, action: { payload: { locations: AccuweatherLocation[] } }) {
+			const {locations} = action.payload;
+			state.favoriteLocations = locations
+			localStorage.setItem(LOCAL_STORAGE_KEYS.FAVORITES, JSON.stringify(state.favoriteLocations))
 		}
+
 
 	},
 	extraReducers(builder) {
@@ -68,7 +75,7 @@ export const weatherDataSlice = createSlice({
 	}
 })
 
-export const {setSelectedLocation, toggleFavoriteLocation} = weatherDataSlice.actions
+export const {setSelectedLocation, toggleFavoriteLocation, setFavoriteLocations} = weatherDataSlice.actions
 
 
 export default weatherDataSlice.reducer

@@ -2,7 +2,7 @@ import {sleep} from '../utils';
 import {AUTOCOMPLETE_MOCKS, CURRENT_WEATHER_MOCK, WEEKLY_FORCAST_MOCK} from '../mocks';
 import axios, {AxiosRequestConfig} from 'axios';
 import {API_ENDPOINTS, API_KEY, BASE_API_URL} from '../constants';
-import {AutocompleteLocation, CurrentWeather, WeeklyForcast} from '../types';
+import {AccuweatherLocation, CurrentWeather, WeeklyForcast} from '../types';
 
 interface BaseApiResponse<T> {
 	data: T | null;
@@ -30,7 +30,7 @@ export const getAutocompleteLocations = async ({
 	searchTerm,
 	useMock = true,
 	throwError = false,
-}: { searchTerm: string, useMock?: boolean, throwError?: boolean }): Promise<BaseApiResponse<AutocompleteLocation[]>> => {
+}: { searchTerm: string, useMock?: boolean, throwError?: boolean }): Promise<BaseApiResponse<AccuweatherLocation[]>> => {
 	if (useMock) {
 		await sleep(1e3)
 		return {
@@ -38,7 +38,7 @@ export const getAutocompleteLocations = async ({
 			error: null
 		}
 	}
-	return baseRequest<AutocompleteLocation[]>({
+	return baseRequest<AccuweatherLocation[]>({
 		throwError,
 		url: `${BASE_API_URL}/${API_ENDPOINTS.autocomplete}`, options: {
 			params: {

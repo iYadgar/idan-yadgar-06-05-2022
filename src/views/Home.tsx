@@ -1,15 +1,15 @@
-import React, {useEffect, useMemo} from 'react';
+import React, {useEffect} from 'react';
 import SearchBarAutocomplete from '../components/SearchBarAutocomplete';
-import {Box, CircularProgress, Container, IconButton, styled, Toolbar, Typography} from '@mui/material';
-import {useAppDispatch, useAppSelector} from '../app/hooks';
-import WeatherItem from '../components/WeatherItem';
-import {Star, StarOutlineOutlined} from '@mui/icons-material';
-import {getLocationWeatherDetails, toggleFavoriteLocation} from '../reducer/weatherDataReducer';
-import {LOCAL_STORAGE_KEYS} from '../constants';
+import {Box, CircularProgress, Container, styled, Toolbar, Typography} from '@mui/material';
+import {useAppDispatch, useAppSelector, useFavoritesIndicator} from '../app/hooks';
+import {getLocationWeatherDetails} from '../reducer/weatherDataReducer';
+import ForecastItem from '../components/ForecastItem';
+import CurrentWeatherDisplay from '../components/CurrentWeatherDisplay';
 
 const HomeContainer = styled('div')`
   display: flex;
   flex: 1;
+  height: 100%;
   flex-direction: column;
   align-items: center;
   padding: 2% 5%;
@@ -25,14 +25,25 @@ const StyledContainer = styled(Container)(({theme}) => ({
 	padding: '10px',
 	color: theme.palette.text.primary,
 	borderRadius: '10px',
-	justifyContent: 'space-between'
+	justifyContent: 'space-between',
+	overflowY: 'auto',
+	[theme.breakpoints.down("md")]: {
+		flex: 1,
+		height: '100%',
+		backgroundColor: theme.palette.background.default,
+	}
 }))
-const ForecastContainer = styled(Container)`
-  display: flex;
-  height: 70%;
-  width: 100%;
-  justify-content: space-between;
-`
+const ForecastContainer = styled(Container)(({theme}) => ({
+	display: 'flex',
+	height: '70%',
+	width: '100%',
+	justifyContent: 'space-between',
+	margin: '100px 0',
+	[theme.breakpoints.down('md')]: {
+		flexDirection: 'column',
+		height: 'fit-content',
+	}
+}))
 const StyledSpinner = styled(CircularProgress)`
   position: absolute;
   top: 50%;
@@ -44,6 +55,12 @@ const StyledToolbar = styled(Toolbar)`
 const StyledBox = styled(Box)`
   height: 100%;
 `
+const ForecastItemWrapper = styled('div')`
+  flex: 0.9;
+  height: 250px;
+  padding: 10px;
+`
+
 
 const Home = () => {
 	const {
@@ -52,49 +69,37 @@ const Home = () => {
 			  error,
 			  currentWeather,
 			  forecastDetails,
-			  favoriteLocations
 		  } = useAppSelector(({weatherData}) => weatherData)
 	const dispatch = useAppDispatch();
-	const isInFavorites = useMemo(() => selectedLocation && favoriteLocations.some((location) => location.Key === selectedLocation.Key), [favoriteLocations.length, selectedLocation]);
+	const getFavoriteIndicator = useFavoritesIndicator({location: selectedLocation})
 	useEffect(() => {
 		if (selectedLocation) {
 			dispatch(getLocationWeatherDetails(selectedLocation.Key))
 		}
 	}, [dispatch, selectedLocation]);
-	const toggleLocationToFavorites = () => {
-		if (selectedLocation) {
-			dispatch(toggleFavoriteLocation({location: selectedLocation}))
-		}
-		localStorage.setItem(LOCAL_STORAGE_KEYS.FAVORITES, JSON.stringify(favoriteLocations))
-	}
 
 
 	const renderWeatherContent = () => forecastDetails && selectedLocation && currentWeather && <>
 		<StyledToolbar>
-			<Box>
+			<StyledBox>
 				<Typography variant='h4'>
 					{selectedLocation.LocalizedName}, {selectedLocation.Country.LocalizedName}
 				</Typography>
-				<Typography variant='h6'>
-					{currentWeather.WeatherText}, {currentWeather.Temperature.Metric.Value}<span>&#176;</span>
-				</Typography>
+				<CurrentWeatherDisplay currentWeather={currentWeather}/>
 				<Typography variant='body1'>
 					{forecastDetails.Headline.Text}
 				</Typography>
-			</Box>
+			</StyledBox>
 			<StyledBox>
-				<IconButton
-					onClick={toggleLocationToFavorites}
-					size="large"
-					aria-label="show 4 new mails" color="inherit">
-					{isInFavorites ? <Star color='secondary'/> : <StarOutlineOutlined/>}
-				</IconButton>
-
+				{getFavoriteIndicator()}
 			</StyledBox>
 		</StyledToolbar>
 		<ForecastContainer>
-			{forecastDetails.DailyForecasts.map((forecast) => <WeatherItem key={forecast.Date}
-																			   dailyForecast={forecast}/>)}
+			{forecastDetails.DailyForecasts.map((forecast) => <ForecastItemWrapper key={forecast.Date}>
+					<ForecastItem
+						dailyForecast={forecast}/>
+				</ForecastItemWrapper>
+			)}
 		</ForecastContainer>
 	</>
 	return (<HomeContainer>

@@ -1,5 +1,5 @@
-import {AutocompleteLocation, CurrentWeather, WeeklyForcast} from '../types';
-export const AUTOCOMPLETE_MOCKS: AutocompleteLocation[] = [
+import {AccuweatherLocation, CurrentWeather, WeeklyForcast} from '../types';
+export const AUTOCOMPLETE_MOCKS: AccuweatherLocation[] = [
 	{
 		"Version": 1,
 		"Key": "294021",

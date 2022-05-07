@@ -1,11 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {createTheme, styled, ThemeProvider} from '@mui/material';
 import {Route, Routes} from "react-router-dom";
 import Favorites from './views/Favorites';
 import Home from './views/Home';
-import {ROUTES} from './constants';
-import {useAppSelector} from './app/hooks';
+import {LOCAL_STORAGE_KEYS, ROUTES} from './constants';
+import {useAppDispatch, useAppSelector} from './app/hooks';
 import Navbar from './components/Navbar';
+import {setFavoriteLocations} from './reducer/weatherDataReducer';
 
 
 const AppContainer = styled('div')(({theme}) => ({
@@ -18,11 +19,21 @@ const AppContainer = styled('div')(({theme}) => ({
 
 function App() {
 	const {themeMode} = useAppSelector(({layout}) => layout)
+	const dispatch = useAppDispatch();
 	const theme = createTheme({
 		palette: {
 			mode: themeMode,
 		}
 	});
+	useEffect(() => {
+		const favoriteLocationsFromLocalStorage = localStorage.getItem(LOCAL_STORAGE_KEYS.FAVORITES)
+		if (favoriteLocationsFromLocalStorage) {
+			const locations = JSON.parse(favoriteLocationsFromLocalStorage)
+			dispatch(setFavoriteLocations({locations}))
+
+		}
+
+	}, []);
 
 
 	return (

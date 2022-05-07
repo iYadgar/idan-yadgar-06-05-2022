@@ -43,7 +43,7 @@ const Navbar = () => {
 			localStorage.setItem(LOCAL_STORAGE_KEYS.THEME, themeMode)
 		}
 	}
-	return <AppBar position="static">
+	return <AppBar position="sticky">
 		<StyledToolbar>
 			<Typography
 				variant="h6"
